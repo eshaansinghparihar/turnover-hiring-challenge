@@ -2,7 +2,7 @@ import React from 'react'
 import { MagnifyingGlassIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
 
 
-export default function Header({title= 'ecommerce'}) {
+export default function Header({title= 'ecommerce', children}) {
   return (
     <div>
         <div className='flex flex-row text-xs mt-2 font-thin'>
@@ -51,7 +51,9 @@ export default function Header({title= 'ecommerce'}) {
         </svg>
 
         </div>
-    </div>
+        </div>
+
+        {children}
 
     </div>
   )
