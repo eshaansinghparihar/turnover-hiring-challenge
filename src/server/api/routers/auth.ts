@@ -1,7 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-// @ts-expect-error nanana
-import { hashPassword ,verifyPassword} from "../utils.ts";
+import { hashPassword, verifyPassword } from "../utils";
+import jwt from 'jsonwebtoken';
+
+// Define a secret key for signing JWT tokens
+const JWT_SECRET:string = process.env.JWT_SECRET!
 
 export const authRouter = createTRPCRouter({
   signup: publicProcedure
@@ -25,30 +31,31 @@ export const authRouter = createTRPCRouter({
         },
       });
 
-      // Generate a token or handle user login here
-      return { message: "User created successfully", user };
+      // Generate a token upon successful signup
+      const token = jwt.sign({ userId: user.id }, JWT_SECRET);
+
+      return { message: "User created successfully", user, token };
     }),
   login: publicProcedure
-  .input(z.object({ email: z.string().email(), password: z.string() }))
-  .mutation(async ({ ctx, input }) => {
-    const user = await ctx.db.user.findUnique({
-      where: { email: input.email },
-    });
+    .input(z.object({ email: z.string().email(), password: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const user = await ctx.db.user.findUnique({
+        where: { email: input.email },
+      });
 
-    if (!user) {
-      throw new Error("Invalid email or password");
-    }
+      if (!user) {
+        throw new Error("Invalid email or password");
+      }
 
-    const passwordValid = await verifyPassword(input.password, user.password);
+      const passwordValid = await verifyPassword(input.password, user.password);
 
-    if (!passwordValid) {
-      throw new Error("Invalid email or password");
-    }
+      if (!passwordValid) {
+        throw new Error("Invalid email or password");
+      }
 
-    // Generate a token or handle user login here
-    return { message: "Login successful" ,user};
-  }),
- 
+      // Generate a token upon successful login
+      const token = jwt.sign({ userId: user.id }, JWT_SECRET);
 
-
+      return { message: "Login successful", user, token };
+    }),
 });

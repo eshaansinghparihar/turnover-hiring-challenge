@@ -1,11 +1,13 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/await-thenable */
 import React,{useState} from 'react';
-import Link from 'next/link';
 import Header from '~/components/Header';
 import { api } from "~/utils/api"
 import router from 'next/router';
+import Link from 'next/link'
+
 const SignupForm = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -27,16 +29,16 @@ const SignupForm = () => {
     const { email, password, username } = formData;
     try {
        await data.mutate({ email, password, username });
-      setFormData({
-        username: "",
-        email: "",
-        password: ""
-      });
 
       // Simulate a delayed database call
       setTimeout(async () => {
       await sendOTP(email).catch(error=>console.error("Error while sending OTP: ",error)); // Send OTP after 10 seconds delay
       // Navigate to verifyEmail page with email query parameter
+      setFormData({
+        username: "",
+        email: "",
+        password: ""
+      });
       router.push({
       pathname: '/verifyEmail',
       query: { email }
