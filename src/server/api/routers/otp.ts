@@ -14,19 +14,41 @@ export const otpRouter = createTRPCRouter({
 
       const otpCode = generateOTP()
 
-      // Optional: Store OTP in database for verification
-      //   if (yourAppUsesSeparateOTPTable) {
-      //     await ctx.db.otp.create({
-      //       data: {
-      //         userId: user.id,
-      //         code: otpCode,
-      //         expiry: new Date(Date.now() + 5 * 60 * 1000), // Expiry in 5 minutes (adjust as needed)
-      //       },
-      //     });
-      //   }
+      // Update the User's OTP field with the generated OTP
+      await ctx.db.user.update({
+        where: { email: input.email },
+        data: {
+          otp: otpCode
+        }
+      });      
+      
 
       await sendEmail(input.email, otpCode);
 
       return { message: "OTP sent successfully" };
+    }),
+    
+    verifyInputOTP: publicProcedure
+    .input(z.object({ email: z.string().email(), otp: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      // Find the user by email
+      const user = await ctx.db.user.findUnique({
+        where: { email: input.email },
+      });
+
+      // If user doesn't exist, throw an error
+      if (!user) throw new Error("User not found");
+
+      // If OTPs don't match, throw an error
+      if (user.otp !== input.otp) throw new Error("Invalid OTP");
+
+      // Update the user's isAuthenticated field to true
+      await ctx.db.user.update({
+        where: { email: input.email },
+        data: { isAuthenticated: true },
+      });
+
+      // Return a success message
+      return { message: "OTP verification successful" };
     }),
 });

@@ -24,23 +24,7 @@ model User {
   password        String
   isAuthenticated Boolean 
   categories      Category[]
-  otp OTP?
-}
-
-model OTP {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @unique
-  code      String
-  expiry    DateTime? // Optional for time-limited OTPs
-  used      Boolean   @default(false) // Flag to prevent reuse
-  
-  user      User     @relation(fields: [userId], references: [id])
-}
-
-model Post {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now())
+  otp             String?
 }
 
 
