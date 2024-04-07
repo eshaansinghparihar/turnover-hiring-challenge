@@ -18,11 +18,23 @@ model Category {
 }
 
 model User {
+  id              Int      @id @default(autoincrement())
+  username        String   @unique
+  email           String   @unique
+  password        String
+  isAuthenticated Boolean 
+  categories      Category[]
+  otp OTP?
+}
+
+model OTP {
   id        Int      @id @default(autoincrement())
-  username  String   @unique
-  email     String   @unique
-  password  String
-  categories Category[]
+  userId    Int      @unique
+  code      String
+  expiry    DateTime? // Optional for time-limited OTPs
+  used      Boolean   @default(false) // Flag to prevent reuse
+  
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Post {
