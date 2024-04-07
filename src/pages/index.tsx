@@ -17,17 +17,6 @@ export default function Home() {
 
   const [isUserLoggedIn, setUserLoggedIn]=useState(true)
 
-  const router = useRouter();
-
-  const handleLogin = () => {
-    setUserLoggedIn(true);
-    router.push("/");
-  };
-
-  const handleLogout = () => {
-    setUserLoggedIn(false);
-    router.push("/login");
-  };
 
   return (
     <>
@@ -36,7 +25,7 @@ export default function Home() {
           <>Hi User</>
           : 
           <>
-          <LoginForm onLogin={handleLogin} />
+          <LoginForm />
           </>}
       </Head>
     </>

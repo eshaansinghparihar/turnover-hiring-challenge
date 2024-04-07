@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Header from '~/components/Header';
 import Head from "next/head";
 
-const LoginForm = ({onLogin}) => {
+const LoginForm = () => {
   return (
     <Head>
         <Header>
@@ -32,7 +32,7 @@ const LoginForm = ({onLogin}) => {
         />
         <span className="absolute mt-2 inset-y-0 right-0 flex items-center pr-3 text-xs font-thin text-black-500 cursor-pointer underline">Show</span>
       </div>
-      <button onClick={onLogin} 
+      <button
       className="w-full bg-black text-white font-light tracking-widest text-xs px-6 py-4 rounded uppercase mt-6 mx-auto block hover:bg-gray-800">Login</button>
       <hr className="mt-6 mb-2 border-gray-400" />
     <div className="flex justify-center">

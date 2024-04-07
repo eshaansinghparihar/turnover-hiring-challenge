@@ -28,7 +28,7 @@ export const authRouter = createTRPCRouter({
       // Generate a token or handle user login here
       return { message: "User created successfully", user };
     }),
-    login: publicProcedure
+  login: publicProcedure
   .input(z.object({ email: z.string().email(), password: z.string() }))
   .mutation(async ({ ctx, input }) => {
     const user = await ctx.db.user.findUnique({
