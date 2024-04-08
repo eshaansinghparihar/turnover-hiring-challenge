@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { api } from '~/utils/api'
 import Header from '~/components/Header';
 import Link from 'next/link'
+import Loading from '~/components/Loading';
 
 const LoginForm = () => {
 
@@ -15,6 +16,7 @@ const LoginForm = () => {
   const [pageError, setPageError] = useState('');
   const router = useRouter();
   const login = api.auth.login.useMutation();
+  const [isLoading, setLoading]= useState(false)
 
   const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -41,6 +43,8 @@ const LoginForm = () => {
       setPageError('Password must be at least 8 characters long.');
       return;
       }
+
+      setLoading(true)
 
       const { user } = await login.mutateAsync(formData);
 
@@ -105,7 +109,8 @@ const LoginForm = () => {
           <p className="text-xs mt-4 text-center text-gray-700">Don`t have an Account? <span className="font-light cursor-pointer uppercase tracking-widest hover:underline font-semibold"><Link href='/signup'>sign up</Link></span></p>
         </div>
         {pageError ? <p className='mt-4 text-xs text-red-600 text-center'>{pageError}</p>: <></>}
-            </div>
+        {isLoading && <Loading/>}
+        </div>
       </Header>
   );
 };

@@ -7,6 +7,7 @@ import Header from '~/components/Header';
 import { api } from "~/utils/api"
 import router from 'next/router';
 import Link from 'next/link'
+import Loading from '~/components/Loading';
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ const SignupForm = () => {
     password: ""
   });
   const [pageError, setPageError] = useState('');
+  const [isLoading, setLoading]= useState(false)
   const data = api.auth.signup.useMutation();
   const otp =  api.otp.generateOTPProcedure.useMutation()
   const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
@@ -45,6 +47,7 @@ const SignupForm = () => {
       setPageError('Missing required field(s)');
       return;
     }
+    setLoading(true)
     try {
        await data.mutate({ email, password, username });
 
@@ -159,6 +162,7 @@ const SignupForm = () => {
             </span>
           </p>
           {pageError ? <p className='mt-4 text-xs text-red-600 text-center'>{pageError}</p>: <></>}
+          {isLoading && <Loading/>}
         </div>
       </main>
     </Header>

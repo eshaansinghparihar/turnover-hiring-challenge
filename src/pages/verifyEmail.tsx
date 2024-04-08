@@ -8,6 +8,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
 import Header from "~/components/Header";
+import Loading from "~/components/Loading";
 
 const VerifyEmail = () => {
   const [inputOTP, setInputOTP] = useState("");
@@ -15,6 +16,7 @@ const VerifyEmail = () => {
   const email = router.query.email as string;
   const otp = api.otp.verifyInputOTP.useMutation();
   const [pageError, setPageError] = useState('');
+  const [isLoading, setLoading]=useState(false)
 
   const verifyOTP = async () => {
     setPageError('')
@@ -22,6 +24,7 @@ const VerifyEmail = () => {
       setPageError('Please enter an 8-digit OTP.');
       return;
     }
+    setLoading(true)
     try {
       const { success } = await otp.mutateAsync({ email, otp: inputOTP });
       // If OTP verification is successful, route to '/'
@@ -73,7 +76,8 @@ const VerifyEmail = () => {
             Verify
           </button>
           {pageError ? <p className='mt-4 text-xs text-red-600 text-center'>{pageError}</p>: <></>}
-        </div>
+          {isLoading && <Loading/>}
+          </div>
       </Header>
     </div>
   );

@@ -14,7 +14,7 @@ const generateCategories = () => {
 };
 
 export const categoryRouter = createTRPCRouter({
-  generateCategories: publicProcedure
+    generateCategories: publicProcedure
     .input(z.object({}))
     .query(() => {
       const generatedCategories = generateCategories();
@@ -32,6 +32,7 @@ export const categoryRouter = createTRPCRouter({
 
       console.log('Push to DB Successful');
     }),
+
     getCategoriesForPagination: publicProcedure
     .input(z.object({ page: z.number().int().positive() }))
     .query(async ({ ctx, input }) => {
@@ -45,4 +46,31 @@ export const categoryRouter = createTRPCRouter({
 
       return categories;
     }),
+
+    updateUserCategories: publicProcedure
+    .input(
+      z.object({
+        email: z.string(),
+        categories: z.array(
+          z.object({
+            id: z.number(),
+            name: z.string(),
+          })
+        ),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { email, categories } = input;
+      
+      const user = await ctx.db.user.findUnique({ where: { email } });
+      if (!user) {
+        throw new Error('User not found');
+      }
+      
+      await ctx.db.user.update({
+        where: { email },
+        data: { categories: { set: categories } },
+      });
+    }),
+
 });
