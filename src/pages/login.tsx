@@ -7,11 +7,13 @@ import { useRouter } from 'next/router';
 import { api } from '~/utils/api'
 import Header from '~/components/Header';
 import Link from 'next/link'
+import { TRPCClientErrorLike } from '@trpc/client';
 
 const LoginForm = () => {
 
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword]=useState(false)
+  const [pageError, setPageError] = useState('');
   const router = useRouter();
   const login = api.auth.login.useMutation();
 
@@ -26,8 +28,7 @@ const LoginForm = () => {
   };
 
   const handleLogin = async () => {
-
-    console.log('handle login clicked')
+    setPageError('')
     try {
       const { user } = await login.mutateAsync(formData);
 
@@ -38,11 +39,13 @@ const LoginForm = () => {
         router.push('/');
       } else {
         // Handle case when user is not authenticated
+        setPageError('User not authenticated. Verify Email')
         console.error('User not authenticated');
       }
     } catch (error) {
       // Handle login error
-      console.error('Login error:', error);
+      setPageError('Login error:')
+      console.error('Login error:' + JSON.stringify(error));
     }
   };
 
@@ -89,7 +92,8 @@ const LoginForm = () => {
           <div className="flex justify-center">
           <p className="text-xs mt-4 text-center text-gray-700">Don`t have an Account? <span className="font-light cursor-pointer uppercase tracking-widest hover:underline font-semibold"><Link href='/signup'>sign up</Link></span></p>
         </div>
-      </div>
+        {pageError ? <p className='mt-4 text-xs text-red-600 text-center'>{pageError}</p>: <></>}
+            </div>
       </Header>
   );
 };

@@ -27,7 +27,7 @@ export const otpRouter = createTRPCRouter({
 
       return { message: "OTP sent successfully" };
     }),
-    
+
     verifyInputOTP: publicProcedure
     .input(z.object({ email: z.string().email(), otp: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -49,6 +49,6 @@ export const otpRouter = createTRPCRouter({
       });
 
       // Return a success message
-      return { message: "OTP verification successful" };
+      return { message: "OTP verification successful", success:true };
     }),
 });

@@ -14,7 +14,7 @@ const SignupForm = () => {
     email: "",
     password: ""
   });
-
+  const [pageError, setPageError] = useState('');
   const data = api.auth.signup.useMutation();
   const otp =  api.otp.generateOTPProcedure.useMutation()
   const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
@@ -26,26 +26,41 @@ const SignupForm = () => {
   }
 
   const saveUser = async () => {
+    setPageError('')
     const { email, password, username } = formData;
+    if (username.length < 3) {
+      setPageError('Username must be at least 3 characters long.');
+      return;
+    }
+    if (password.length < 8) {
+      setPageError('Password must be at least 8 characters long.');
+      return;
+    }
+    if (!email || !password || !username) {
+      setPageError('Missing required field(s)');
+      return;
+    }
     try {
        await data.mutate({ email, password, username });
 
       // Simulate a delayed database call
       setTimeout(async () => {
-      await sendOTP(email).catch(error=>console.error("Error while sending OTP: ",error)); // Send OTP after 5 seconds delay
-      // Navigate to verifyEmail page with email query parameter
+      await sendOTP(email).catch(error=>{
+      setPageError("Error while sending OTP")
+      console.error("Error while sending OTP: ",error)}); 
       setFormData({
         username: "",
         email: "",
         password: ""
       });
       router.push({
-      pathname: '/verifyEmail',
-      query: { email }
+        pathname: '/verifyEmail',
+        query: { email }
       });
       }, 5000);
       } catch (error) {
       // Handle error if needed
+      setPageError("Error while signing up:"+JSON.stringify(error))
       console.error("Error while signing up:", error);
       }
 
@@ -55,6 +70,7 @@ const SignupForm = () => {
     try {
       await otp.mutate({ email });
     } catch (error) {
+      setPageError("Error while sending OTP")
       console.log("Error while sending OTP:", error)
     }
   }
@@ -125,6 +141,7 @@ const SignupForm = () => {
           onClick={async (e) => {
           e.preventDefault();
           await saveUser();
+          if(!pageError)
           await sendOTP(formData.email);
           }}
 >
@@ -136,6 +153,7 @@ const SignupForm = () => {
               <Link href="/login"> login</Link>
             </span>
           </p>
+          {pageError ? <p className='mt-4 text-xs text-red-600 text-center'>{pageError}</p>: <></>}
         </div>
       </main>
     </Header>

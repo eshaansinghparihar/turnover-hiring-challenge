@@ -14,14 +14,18 @@ const VerifyEmail = () => {
   const router = useRouter();
   const email = router.query.email as string;
   const otp = api.otp.verifyInputOTP.useMutation();
+  const [pageError, setPageError] = useState('');
 
   const verifyOTP = async () => {
+    setPageError('')
     try {
-      await otp.mutate({ email, otp: inputOTP });
+      const { success } = await otp.mutateAsync({ email, otp: inputOTP });
       // If OTP verification is successful, route to '/'
+      if(success)
       router.push("/login");
     } catch (error) {
       // Handle error if OTP verification fails
+      setPageError('OTP Verification failed')
       console.error("Error verifying OTP:", error);
     }
   };
@@ -64,6 +68,7 @@ const VerifyEmail = () => {
           >
             Verify
           </button>
+          {pageError ? <p className='mt-4 text-xs text-red-600 text-center'>{pageError}</p>: <></>}
         </div>
       </Header>
     </div>

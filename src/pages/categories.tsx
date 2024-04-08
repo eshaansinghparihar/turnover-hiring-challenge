@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '~/components/Header';
 import { api } from '~/utils/api';
 import SignupForm from './signup';
+import { setErrorMap } from 'zod';
 
 interface Categories{
   id: number;
@@ -37,7 +38,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
         <button 
           key={pageNumber} 
           onClick={() => onPageChange(pageNumber)}
-          className={`mr-2 text-xs ${pageNumber === currentPage ? 'font-semibold' : 'font-thin'}`}
+          className={`mr-2 mt-6 text-xs ${pageNumber === currentPage ? 'font-semibold' : 'font-thin'} hover:underline`}
         >
           {pageNumber}
         </button>
@@ -61,9 +62,6 @@ const Categories = () => {
   
   const { data: categories, error } = api.category.getCategoriesForPagination.useQuery({ page: currentPage });
 
-  if(error)
-  setPageError('Error fetching categories.')
-
   useEffect(()=>{
     const name=localStorage.getItem("username");
     const email=localStorage.getItem("email");
@@ -73,7 +71,10 @@ const Categories = () => {
     }
   },[])
 
+  useEffect(()=>{if(error) setPageError('Error fetching categories.'+JSON.stringify(error.message))},[error])
+
   const handlePageChange = (pageNumber: number) => {
+    setPageError('');
     setCurrentPage(pageNumber);
   };
 
@@ -96,7 +97,7 @@ const Categories = () => {
                 </ul>
               )}
               <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
-              {pageError ? <p>{pageError}</p>: <></>}
+              {pageError ? <p className='mt-4 text-xs text-red-600 text-center'>{pageError}</p>: <></>}
             </div>
           </Header>
         </div>

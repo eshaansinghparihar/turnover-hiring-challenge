@@ -31,10 +31,12 @@ export const authRouter = createTRPCRouter({
         },
       });
 
+      if(!user) throw new Error("Signup Failed")
+
       // Generate a token upon successful signup
       const token = jwt.sign({ userId: user.id }, JWT_SECRET);
 
-      return { message: "User created successfully", user, token };
+      return { success: "User created successfully", user, token };
     }),
   login: publicProcedure
     .input(z.object({ email: z.string().email(), password: z.string() }))
@@ -56,6 +58,6 @@ export const authRouter = createTRPCRouter({
       // Generate a token upon successful login
       const token = jwt.sign({ userId: user.id }, JWT_SECRET);
 
-      return { message: "Login successful", user, token };
+      return { success: "Login successful", user, token };
     }),
 });
