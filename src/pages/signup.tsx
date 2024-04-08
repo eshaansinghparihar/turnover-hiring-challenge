@@ -32,7 +32,7 @@ const SignupForm = () => {
 
       // Simulate a delayed database call
       setTimeout(async () => {
-      await sendOTP(email).catch(error=>console.error("Error while sending OTP: ",error)); // Send OTP after 10 seconds delay
+      await sendOTP(email).catch(error=>console.error("Error while sending OTP: ",error)); // Send OTP after 5 seconds delay
       // Navigate to verifyEmail page with email query parameter
       setFormData({
         username: "",
@@ -43,7 +43,7 @@ const SignupForm = () => {
       pathname: '/verifyEmail',
       query: { email }
       });
-      }, 10000);
+      }, 5000);
       } catch (error) {
       // Handle error if needed
       console.error("Error while signing up:", error);
@@ -131,9 +131,9 @@ const SignupForm = () => {
   Create Account
 </button>
           <p className="text-xs mt-4 text-center text-gray-700">
-            Have an Account ?
+            Have an Account ? 
             <span className="font-light cursor-pointer uppercase tracking-widest hover:underline font-semibold">
-              <Link href="/login">login</Link>
+              <Link href="/login"> login</Link>
             </span>
           </p>
         </div>

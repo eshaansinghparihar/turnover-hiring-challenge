@@ -1,8 +1,36 @@
-import React from 'react'
+/* eslint-disable @typescript-eslint/no-floating-promises */
+import React, { useEffect, useState, type ReactNode } from 'react'
 import { MagnifyingGlassIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/router';
 
+interface HeaderProps {
+    title?: string;
+    children?: ReactNode;
+  }
 
-export default function Header({title= 'ecommerce', children}) {
+export default function Header({title= 'ecommerce', children}:HeaderProps)
+{
+
+    const router = useRouter()
+    const [isUserLoggedIn, setUserLoggedIn]=useState(false)
+    const [userData, setUserData]=useState({
+        name:''
+      })
+
+    const logoutHandler=()=>{
+        localStorage.clear()
+        setUserLoggedIn(false)
+        router.push('/login')
+    }
+
+    useEffect(()=>{
+        const name=localStorage.getItem("username");
+        if(name){
+          setUserData({...userData, name:name})
+          setUserLoggedIn(true)
+        }
+      },[])
+        
   return (
     <div>
         <div className='flex flex-row text-xs mt-2 font-thin'>
@@ -11,7 +39,8 @@ export default function Header({title= 'ecommerce', children}) {
                     <ul className='flex'>
                         <li className='mr-2'>Help</li>
                         <li className='mr-2'>Orders & Returns</li>
-                        <li className='mr-2'>Hi, John</li>
+                        <li className='mr-2'>Hi<span>{isUserLoggedIn ? `,${userData.name}` : ''}</span></li>
+                        {isUserLoggedIn && <li onClick={logoutHandler} className='mr-2 cursor-pointer hover:underline'>Logout</li>}
                     </ul>
                 </div>
         </div>

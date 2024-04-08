@@ -18,18 +18,31 @@ export const categoryRouter = createTRPCRouter({
     .input(z.object({}))
     .query(() => {
       const generatedCategories = generateCategories();
-      return generatedCategories; // Return the generated categories directly
+      return generatedCategories;
     }),
 
     pushCategory: publicProcedure
-    .input(z.array(z.string())) // Input schema for array of strings
+    .input(z.array(z.string()))
     .mutation(async ({ ctx, input }) => {
-      // Push the categories to the database
+      
       await ctx.db.category.createMany({
         data: input.map(name => ({ name })),
         skipDuplicates: true
       });
 
       console.log('Push to DB Successful');
+    }),
+    getCategoriesForPagination: publicProcedure
+    .input(z.object({ page: z.number().int().positive() }))
+    .query(async ({ ctx, input }) => {
+      const { page } = input;
+      const categories = await ctx.db.category.findMany({
+        take: 6,               
+        skip: (page - 1) * 6,
+      });
+
+      if(categories.length === 0) throw new Error("No Results Found")
+
+      return categories;
     }),
 });
