@@ -29,6 +29,19 @@ const LoginForm = () => {
   const handleLogin = async () => {
     setPageError('')
     try {
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+      setPageError('Please enter a valid email address.');
+      return;
+      }
+
+      // Validate password length
+      if (formData.password.length < 8) {
+      setPageError('Password must be at least 8 characters long.');
+      return;
+      }
+
       const { user } = await login.mutateAsync(formData);
 
       if (user.isAuthenticated) {

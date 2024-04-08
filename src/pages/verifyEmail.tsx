@@ -18,6 +18,10 @@ const VerifyEmail = () => {
 
   const verifyOTP = async () => {
     setPageError('')
+    if (inputOTP.length !== 8) {
+      setPageError('Please enter an 8-digit OTP.');
+      return;
+    }
     try {
       const { success } = await otp.mutateAsync({ email, otp: inputOTP });
       // If OTP verification is successful, route to '/'

@@ -28,6 +28,11 @@ const SignupForm = () => {
   const saveUser = async () => {
     setPageError('')
     const { email, password, username } = formData;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+    setPageError('Please enter a valid email address.');
+    return;
+    }
     if (username.length < 3) {
       setPageError('Username must be at least 3 characters long.');
       return;
