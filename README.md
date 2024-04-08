@@ -1,29 +1,40 @@
-# Create T3 App
+# Project Name
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+## Overview
 
-## What's next? How do I make an app with this?
+This project is a web application that allows users to sign up, verify their email address, log in, select categories of interest, and log out. It features error handling and utilizes a modern tech stack for development.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Features
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+- **SignUp**: Users can register with their username, email address, and password.
+- **Verify OTP**: An OTP (One-Time Password) is sent to the user's email for email address verification.
+- **Login**: Implemented a login page for users to authenticate.
+- **Categories Select**: Users can select their interests from a list of products provided.
+- **Logout**: Included a dedicated logout button in the header for user convenience.
+- **Error Handling**: Basic error handling is implemented for common scenarios to improve user experience.
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+## Tech Stack Used
 
-## Learn More
+1. **T3**: Primary framework for backend development.
+2. **Prisma**: ORM (Object-Relational Mapping) tool for database interaction.
+3. **tRPC**: Typed RPC (Remote Procedure Call) framework for TypeScript.
+4. **neon.tech Postgres Database**: Database solution for storing application data.
+5. **Next.js**: React framework for frontend development.
+6. **Tailwind CSS**: Utility-first CSS framework for styling.
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## Getting Started
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+1. **Installation**: Clone the repository and install dependencies using `npm install`.
+2. **Configuration**: Set up environment variables and configure database connection.
+3. **Run the App**: Start the development server using `npm run dev`.
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## Future Improvements
 
-## How do I deploy this?
+1. **Persistence Issue**: Resolve the unknown error preventing user-selected interests from being persisted into the database.
+2. **JWT for Session Management**: Implement JWT (JSON Web Tokens) for more secure and efficient session management.
+3. **Enhanced Error Handling**: Enhance error handling mechanisms to handle edge case scenarios and provide better feedback to users.
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+
+## Deployed Link
+
+The project is deployed at [turnover-hiring-challenge.vercel.app](https://turnover-hiring-challenge.vercel.app).
