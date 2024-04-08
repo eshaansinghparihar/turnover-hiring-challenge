@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/await-thenable */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -6,7 +7,6 @@ import React, { useEffect, useState } from 'react';
 import Header from '~/components/Header';
 import { api } from '~/utils/api';
 import SignupForm from './signup';
-import { setErrorMap } from 'zod';
 
 interface Categories{
   id: number;

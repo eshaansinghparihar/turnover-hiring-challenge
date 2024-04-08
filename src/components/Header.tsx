@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import React, { useEffect, useState, type ReactNode } from 'react'
 import { MagnifyingGlassIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
